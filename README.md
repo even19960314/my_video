@@ -3,7 +3,9 @@
 
 
 项目架构
+
 ks:
+
         ks
 
         myks(django静态文件及视图函数)
