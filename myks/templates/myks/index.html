@@ -5,24 +5,25 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=noe">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>查询结果</title>
+	<title>极速播客</title>
 	<link rel="stylesheet" href="{% static 'myks/css/base.css'%}">
 	<link rel="stylesheet" href="{% static 'myks/css/search-list.css'%}">
+	<link rel="stylesheet" href="{% static 'myks/css/bootstrap.css'%}">
+	<link rel="stylesheet" href="{% static 'myks/css/bootstrap.min.css'%}">
+	<link rel="stylesheet" href="{% static 'myks/css/bootstrap-theme.css'%}">
+	<link rel="stylesheet" href="{% static 'myks/css/bootstrap-theme.min.css'%}">
 	<script src="{% static 'myks/js/jq.js'%}"></script>
 	<script src="{% static 'myks/js/underscore.js'%}"></script>
 	<script src="{% static 'myks/js/adjust.js'%}"></script>
+	<script src="{% static 'myks/js/npm.js'%}"></script>
+	<script src="{% static 'myks/js/bootstrap.js'%}"></script>
+	<script src="{% static 'myks/js/bootstrap.min.js'%}"></script>
+	
 </head>
 <body>
 	<header class="header clearfix">
 		
-		<div class="search clearfix">
-			<form class="clearfix search-form" action="{%url 'myks:index'%}">
-				<input type="text" name="keyword" id="" class="search-inp" value="输入用户id">
-				<button type="submit" class="search-btn">搜索</button>
-			</form>
-		</div>
 	</header>
-	
 	
 	<section class="search-list">
 		<ul class="list-wrap">
@@ -33,7 +34,7 @@
                         <img src="{{i.cover_thumbnail_urls.1.url}}" alt="">
                     </div>
                     <div class="right-box">
-                        <h6 class="video-title">标题:{{i.caption|slice:':8'}}...</h6>
+                        <h6 class="video-title">{{i.caption|slice:':8'}}...</h6>
                         <div class="cont">
                             <p class="p">
                                 <span class="le">作者：</span>
@@ -41,15 +42,30 @@
                                     {{i.user_name}}
                                 </span>
                             </p>
-                            <p class="p"><span class="le">标签：</span><span class="ri">{{i.tags.0.tag}}</span></p>
+                            <p class="p">
+                                <span class="le">ID：</span>
+                                <span class="ri">
+                                    {{i.user_id}}
+                                </span>
+                            </p>
                             <p class="p"><span class="le">时间：</span><span class="ri">{{i.time}}</span></p>
                         </div>
                     </div>
                 </a>
+                
             </li>
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <a href="http://120.77.212.140:5000/jsbk/comment?pid={{i.photo_id}}&uid={{i.user_id}}" class="clearfix"><font color="white">评论</font></a>
+        	</button>
+        	<button type="button" class="btn btn-primary btn-lg btn-block">
+                <a href="http://120.77.212.140:5000/jsbk/pc?uid={{i.user_id}}" class="clearfix"><font color="white">更多作品</font></a>
+        	</button>
             {% endfor %}
 		</ul>
 	</section>
+	<button type="button" class="btn btn-primary btn-lg btn-block">
+    	<a href="http://120.77.212.140:5000/jsbk/"><font color="white">换一组</font></a>
+	</button>
 </body>
 <script src="{% static 'myks/js/search-list.js'%}"></script>
 </html>

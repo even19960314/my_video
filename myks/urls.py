@@ -24,9 +24,9 @@ urlpatterns = [
 
 	path('', views.index, name = 'index'),
 
-    #path('get/', views.search_get, name = 'movies'),
+    path('comment/', views.comment, name = 'comment'),
     
-    #path('play/', views.play, name = 'play'),
+    path('pc/', views.pc, name = 'pc'),
 
     #path('admin/', admin.site.urls),
 ]

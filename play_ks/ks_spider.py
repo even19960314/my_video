@@ -6,9 +6,7 @@ Created on Tue Jun 18 09:11:53 2019
 """
 from spider import Spider
 from multiprocessing.dummy import Pool
-import jpype
-import os
-#from klh import kuaishou
+from play_ks.kuaishou import kuaishou
 
 
 class Ks_spider:
@@ -16,25 +14,15 @@ class Ks_spider:
 
     def __init__(self,javaClass):#初始化JVM, 
         
-        '''
-        args: sig_ls 存储破解sig a
-              arg_ls 存储data参数
-        '''
-#        jarpath = os.path.join(os.path.abspath("."), "E:\\ks\\play_ks\\")
-#        
-#        jvmPath = r'E:\Java\jre1.8.0_101\bin\server\jvm.dll'
-#        
-#        jpype.startJVM(jvmPath, "-ea","-Djava.class.path=%s" % (jarpath + 'ks_sig.jar'))  
-#        
-#        self.javaClass = jpype.JClass("SingatureUtil")
-        
-        self.sig_ls = []
+        self.sig_ls = [] #存储破解sig
                 
         self.t = javaClass()
         
-        self.arg_ls = []
+        self.arg_ls = [] #存储data参数
         
         self.arg = []
+        
+        self.javaClass = javaClass
         
     def run(self,args):#破解快手sig码
     
@@ -75,8 +63,6 @@ class Ks_spider:
             s_sig_ls.append(sig_l+sig_r)
         
         for i in range(len(s_sig_ls)):
-            
-            print(i)
             
             sig = self.t.run(s_sig_ls[i])
             
@@ -127,7 +113,17 @@ class Ks_spider:
             
             info = p.map(self.get_comment,args)
         
-            next_args = [(args[i][0],args[i][1],info[i]['pcursor'])for i in range(len(args))]
+            next_args = []
+            
+            for i in range(len(args)):
+            
+                try:
+                    
+                    next_args.append((args[i][0],args[i][1],info[i]['pcursor']))
+                    
+                except Exception as e:
+                    
+                    print(e.args)
         
         s_sig_ls = []
         
@@ -179,30 +175,25 @@ class Ks_spider:
                 
                 break
             
-    def get_args(self,movies,userId):#通过用户ID获取用户当前作品的所有评论
+    def get_args(self,userId,pid):#通过用户ID获取用户当前作品的所有评论
+        
+        movies = kuaishou(self.javaClass).zuoping(userId)
         
         args = self.get_first_comment_data(movies)
         
-        print(len(args))
-        
-        args = [i for i in args if i[1] == userId]
+        args = [i for i in args if int(i[0]) == int(pid)]
         
         queue = self.get_all_comment_pro(args)
-    
+
         self.do_work(queue)
         
+        print(self.arg)
+        
         args = [i[0] for i in self.arg]
-                
+
         return self.comment_info(args)
     
-    def close(self):
-        
-        jpype.shutdownJVM()
-        
-        print('关闭JVM')
-        
-    
-    
+
     
 if __name__ == '__main__':
     
